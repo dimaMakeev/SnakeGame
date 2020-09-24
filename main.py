@@ -18,7 +18,7 @@ class cube(object):
     def move(self, dirnx, dirny):
         self.dirnx = dirnx
         self.dirny = dirny
-        self.pos(self.pos[0] + self.dirnx, self.pos[1] + self.dirny ) 
+        self.pos = (self.pos[0] + self.dirnx, self.pos[1] + self.dirny ) 
 
     def draw(self, surface, eyes=False):
         dis = self.w // self.rows
@@ -51,6 +51,8 @@ class snake(object):
             if event.type == pygame.QUIT:
                 pygame.quit()
             keys = pygame.key.get_pressed()
+
+            
             for key in keys:
                 if keys[pygame.K_LEFT]:
                     self.dirnx =-1
@@ -95,10 +97,14 @@ class snake(object):
 
 
 def redrawWindow(surface):
-    global width, rows
+    global rows, width, s, snack
     surface.fill((0,0,0))
-    drawGrid(width, rows, surface)
+    s.draw(surface)
+   # snack.draw(surface)
+    drawGrid(width,rows, surface)
     pygame.display.update()
+
+    
 def drawGrid(w, rows, surface):
     sizeBeetwen = w//rows
     x = 0
@@ -111,7 +117,7 @@ def drawGrid(w, rows, surface):
     
 
 def main():
-    global width, rows  
+    global width, rows, s  
     width = 500   
     rows = 20
     win = pygame.display.set_mode((width, width))
@@ -124,5 +130,7 @@ def main():
         pygame.time.delay(50)
         clock.tick(10)  
         redrawWindow(win)
-         
+        s.move()
+        
+pass      
 main()    
