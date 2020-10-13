@@ -1,9 +1,11 @@
-import math
-import random
+
+import time
 import tkinter as tk
 from tkinter import messagebox
-
+from serial import Serial
 import pygame
+ 
+
 
 
 
@@ -39,6 +41,7 @@ class cube(object):
 class snake(object):
     body = []
     turns = {}
+    ser = serial.Serial('COM3', 9600, timeout=0)
 
     def __init__(self, color, pos):
         self.color = color
@@ -46,11 +49,16 @@ class snake(object):
         self.body.append(self.head)
         self.dirnx = 0
         self.dirny = 1
+        #ser = serial.Serial('COM3', 9600, timeout=0)
     def move(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
             keys = pygame.key.get_pressed()
+            dir = tuple(map(int, ser.readline().split(',')))
+            print(dir)
+            time.sleep(1)
+            self.dirnx, self.dirny = dir
 
             
             for key in keys:
@@ -59,7 +67,7 @@ class snake(object):
                     self.dirny = 0
                     self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
                 elif keys[pygame.K_RIGHT]:
-                    self.dirnx =1
+                    self.dirnx = 1
                     self.dirny = 0
                     self.turns[self.head.pos[:]] = [self.dirnx, self.dirny]
                 elif keys[pygame.K_UP]:
